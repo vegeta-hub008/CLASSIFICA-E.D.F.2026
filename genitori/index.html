@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classifica Genitori</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* child selector modal */
+    #child-prompt-overlay {
+      position: fixed; inset: 0; z-index: 9999; display:flex;align-items:center;justify-content:center;backdrop-filter: blur(6px); background: rgba(4,6,12,0.6);
+    }
+    #child-prompt {
+      background: rgba(15,23,42,0.95); border:1px solid rgba(96,165,250,0.22); padding:20px; border-radius:16px; width:320px; color:#e2e8f0;
+    }
+    #child-prompt input, #child-prompt select { width:100%; padding:10px;border-radius:10px;border:1px solid rgba(96,165,250,0.18);background:rgba(8,10,20,0.6);color:#e2e8f0;margin-top:8px }
+    .highlight-row { background: linear-gradient(90deg, rgba(96,165,250,0.06), rgba(96,165,250,0.02)); border-left:4px solid #60a5fa; }
+    .highlight-macro { box-shadow: 0 8px 30px rgba(96,165,250,0.12); border:1.5px solid rgba(96,165,250,0.28); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Sito genitori</p>
+      <h1>Classifica digitale e album dei bimbi</h1>
+      <p class="intro">Qui i genitori possono vedere la classifica aggiornata e le foto caricate ogni giorno dagli animatori.</p>
+    </div>
+    <div class="top-actions">
+      <a href="../index.html" class="button secondary">Torna al sito principale</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Classifica</p>
+          <h2>Squadre e Macro Gruppi</h2>
+          <p class="intro">I genitori visualizzano le classifiche in sola lettura, aggiornate dal sito principale.</p>
+        </div>
+        <div class="status">Ultimo aggiornamento: <span id="lastUpdated">-</span></div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
+        <input id="child-search-input" placeholder="Cerca tuo figlio" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(96,165,250,0.14);background:rgba(8,10,20,0.6);color:#e2e8f0;" />
+        <button id="child-search-btn" class="button" onclick="searchChild()">Cerca</button>
+        <button class="button ghost" onclick="clearChildSearch()">Annulla</button>
+        <div id="child-search-result" style="margin-left:8px;color:#cbd5e1;font-size:13px;"></div>
+      </div>
+
+      <div class="grid-two">
+        <div class="table-card">
+          <div class="eyebrow" style="margin-bottom:12px;">Classifica Squadre</div>
+          <table class="ranking-table">
+            <thead>
+              <tr>
+                  <th>#</th>
+                  <th>Nome</th>
+                <th>Punti</th>
+                <th>Macro</th>
+              </tr>
+            </thead>
+            <tbody id="rankingBody"></tbody>
+          </table>
+        </div>
+
+        <div class="table-card">
+          <div class="eyebrow" style="margin-bottom:12px;">Macro Gruppi</div>
+          <div id="macroCards" class="photo-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Animatori</p>
+          <h2>Elenco Animatori</h2>
+          <p class="intro">Vedi quali bambini sono seguiti da ogni animatore.</p>
+        </div>
+      </div>
+      <div class="table-card" id="animatorList" style="padding:16px;">
+        <div style="color:#cbd5e1;opacity:0.7;">Nessun animatore registrato. Gli animatori possono essere aggiunti dallo staff nel sito principale.</div>
+      </div>
+    </section>
+
+    <section class="panel photo-panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Foto giornaliere</p>
+          <h2>Album condiviso</h2>
+          <p class="small">Le foto caricate dal sito principale compaiono qui in automatico.</p>
+        </div>
+      </div>
+
+        <div class="table-card" style="display:flex;flex-direction:column;justify-content:center;margin-bottom:18px;">
+          <div style="text-align:center;">
+            <div class="eyebrow" style="margin-bottom:10px;">Sola lettura</div>
+            <div style="font-size:14px;font-weight:700;color:#e2e8f0;">I genitori non possono modificare punteggi o foto</div>
+            <p style="margin-top:10px;color:#cbd5e1;opacity:0.8;line-height:1.6;">Questa pagina mostra gli stessi risultati del sito principale in tempo reale.</p>
+          </div>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+    </section>
+  </main>
+
+  <!-- CHILD PROMPT -->
+  <div id="child-prompt-overlay" style="display:none;">
+    <div id="child-prompt">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">Benvenuto genitore</div>
+      <div style="color:#cbd5e1;font-size:13px;margin-bottom:12px;">Inserisci il nome del bambino; cerchiamo automaticamente la sua squadra</div>
+      <label style="font-size:12px;color:#cbd5e1;">Nome bambino</label>
+      <input id="child-name-input" placeholder="Es. Alice" />
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
+        <button id="child-skip-btn" class="button ghost" style="padding:8px 12px;border-radius:10px;">Salta</button>
+        <button id="child-save-btn" class="button" style="padding:8px 12px;border-radius:10px;">Mostra</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>App genitori - aggiornamento in tempo reale sul dispositivo.</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="import_children.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>

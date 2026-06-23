@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alice nel Paese delle Meraviglie — Campo Estivo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #090b11;
+  font-family: 'Inter', sans-serif;
+  color: #e2e8f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.page-bg {
+  background: #0f172a;
+  min-height: 100vh;
+  padding: 28px 16px 60px;
+}
+
+.font-cinzel { font-family: 'Cinzel', serif; }
+
+/* ── LOGIN SCREEN ── */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #090b11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0;
+}
+#login-box {
+  background: rgba(15,23,42,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(96,165,250,0.55);
+  border-radius: 28px;
+  padding: 44px 40px 40px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(56,189,248,0.2), 8px 8px 0 rgba(59,130,246,0.35);
+}
+#login-input {
+  width: 100%;
+  background: rgba(15,23,42,0.75);
+  border: 2px solid rgba(96,165,250,0.45);
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  text-align: center;
+  letter-spacing: 3px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 14px;
+}
+#login-input::placeholder { color: #94a3b8; }
+#login-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.2);
+}
+#login-btn {
+  width: 100%;
+  background: #2563eb;
+  color: #e2e8f0;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 4px 4px 0 rgba(30,58,138,0.85);
+}
+#login-btn:hover { opacity: 0.95; transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(30,58,138,0.85); }
+#login-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 rgba(30,58,138,0.75); }
+#login-error {
+  color: #f87171;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px;
+  min-height: 18px;
+  display: none;
+}
+
+/* ── GLASS SURFACES ── */
+.glass {
+  background: rgba(15,23,42,0.76);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(96,165,250,0.22);
+  border-radius: 20px;
+}
+
+/* ── MACRO CARDS ── */
+.macro-card {
+  border-radius: 20px;
+  padding: 22px 20px;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: auto;
+  max-height: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.25);
+}
+.macro-card:hover { transform: translateY(-4px); }
+
+.macro-rossi {
+  background: rgba(220,38,38,0.14);
+  border: 1.5px solid rgba(220,38,38,0.4);
+  box-shadow: 0 4px 24px rgba(220,38,38,0.12), 4px 4px 0 rgba(220,38,38,0.18);
+}
+.macro-verdi {
+  background: rgba(16,185,129,0.12);
+  border: 1.5px solid rgba(16,185,129,0.45);
+  box-shadow: 0 4px 24px rgba(16,185,129,0.12), 4px 4px 0 rgba(16,185,129,0.18);
+}
+.macro-blu-group {
+  background: rgba(59,130,246,0.12);
+  border: 1.5px solid rgba(59,130,246,0.45);
+  box-shadow: 0 4px 24px rgba(59,130,246,0.12), 4px 4px 0 rgba(59,130,246,0.18);
+}
+
+/* ── VERTICAL BAR CHART ── */
+.bar-chart-wrap { overflow-x: auto; overflow-y: visible; padding-bottom: 8px; }
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  min-width: max-content;
+  width: 100%;
+  padding: 0 4px;
+  min-height: 420px;
+  height: auto;
+}
+.macro-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 260px;
+  margin-top: 16px;
+}
+.macro-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 56px;
+  flex-shrink: 0;
+  min-height: auto;
+}
+.macro-bar-rect-wrap {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 180px;
+  height: auto;
+}
+.macro-bar-rect {
+  width: 100%;
+  border-radius: 10px 10px 4px 4px;
+  min-height: 12px;
+  border: 2px solid rgba(255,255,255,0.12);
+  transition: transform 0.2s ease;
+}
+.macro-bar-rect:hover { transform: scaleX(1.05); }
+.macro-bar-rank {
+  font-size: 10px;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  min-height: 18px;
+}
+.macro-bar-name {
+  font-size: 9px;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  word-break: break-word;
+  white-space: normal;
+  min-height: 24px;
+}
+.bar-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 72px;
+  flex-shrink: 0;
+  min-height: 450px;
+}
+.bar-score {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c7d2fe;
+  white-space: nowrap;
+}
+.bar-rect-wrap {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1;
+  min-height: 260px;
+  height: auto;
+}
+.bar-rect {
+  width: 56px;
+  border-radius: 10px 10px 4px 4px;
+  transition: height 0.8s cubic-bezier(0.34,1.2,0.64,1);
+  cursor: pointer;
+  min-height: 4px;
+  border: 2px solid rgba(255,255,255,0.12);
+}
+.bar-rect:hover { filter: brightness(1.12); transform: scaleX(1.05); }
+.bar-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.25;
+  width: 100%;
+  word-break: break-word;
+  white-space: normal;
+  letter-spacing: 0.3px;
+  min-height: 26px;
+}
+.bar-rank { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; }
+.rank-gold   { color: #fbbf24; }
+.rank-silver { color: #94a3b8; }
+.rank-bronze { color: #f59e0b; }
+.rank-other  { color: #60a5fa; font-size: 11px; }
+
+/* ── DAILY TABLE ── */
+.day-table { width: 100%; border-collapse: collapse; }
+.day-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #e2e8f0;
+  opacity: 0.75;
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1.5px solid rgba(96,165,250,0.25);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.day-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(148,163,184,0.14);
+  vertical-align: middle;
+  color: #d1d5db;
+}
+.day-table tr:last-child td { border-bottom: none; }
+.day-table tr:hover td { background: rgba(96,165,250,0.08); }
+
+/* ── INPUTS / BUTTONS ── */
+input[type="number"], input[type="text"], input[type="date"], select, textarea {
+  background: rgba(15,23,42,0.75);
+  border: 1.5px solid rgba(96,165,250,0.32);
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
+}
+input::placeholder { color: #94a3b8; }
+select option { background: #111827; color: #e2e8f0; }
+
+.btn-primary {
+  background: #2563eb;
+  color: #e2e8f0;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 3px 3px 0 rgba(30,58,138,0.85);
+}
+.btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(30,58,138,0.85); }
+.btn-primary:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgba(30,58,138,0.75); }
+
+.btn-plus {
+  background: rgba(16,185,129,0.18);
+  color: #a7f3d0;
+  border: 1.5px solid rgba(16,185,129,0.5);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-plus:hover { background: rgba(16,185,129,0.35); }
+
+.btn-minus {
+  background: rgba(220,38,38,0.18);
+  color: #fecaca;
+  border: 1.5px solid rgba(220,38,38,0.45);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-minus:hover { background: rgba(220,38,38,0.28); }
+
+.btn-save-day {
+  background: #2563eb;
+  color: #e2e8f0;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 3px 3px 0 rgba(30,58,138,0.85);
+}
+.btn-save-day:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(30,58,138,0.85); }
+
+.btn-danger {
+  background: rgba(220,38,38,0.16);
+  border: 1.5px solid rgba(220,38,38,0.48);
+  color: #fecaca;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.btn-danger:hover { background: rgba(220,38,38,0.28); }
+
+.toggle-btn {
+  background: #2563eb;
+  border: none;
+  color: #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.5px;
+  box-shadow: 4px 4px 0 rgba(30,58,138,0.85);
+}
+.toggle-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(30,58,138,0.85); }
+.toggle-btn:active { transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(30,58,138,0.75); }
+
+/* ── LOG ── */
+.log-entry {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(15,23,42,0.72);
+  border-left: 3px solid;
+  font-size: 13px;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION TITLE ── */
+.sec-title {
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+/* ── MACRO SCORE ── */
+.macro-num {
+  font-family: 'Cinzel', serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+/* ── TABS ── */
+.tab-btn {
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid rgba(96,165,250,0.3);
+  background: transparent;
+  color: rgba(191,219,254,0.85);
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.tab-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #e2e8f0;
+  box-shadow: 2px 2px 0 rgba(30,58,138,0.85);
+}
+.page-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.page-tab-btn {
+  padding: 10px 24px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(96,165,250,0.3);
+  background: rgba(15,23,42,0.7);
+  color: rgba(191,219,254,0.85);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.page-tab-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #e2e8f0;
+  box-shadow: 2px 2px 0 rgba(30,58,138,0.85);
+}
+.page-section {
+  display: block;
+  opacity: 0;
+  transform: translateY(16px);
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.45s ease;
+}
+.page-section.active {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 2000px;
+  visibility: visible;
+  animation: pageFadeIn 0.38s ease;
+}
+.present-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(9,11,17,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.present-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.present-card {
+  width: min(520px,calc(100% - 40px));
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(15,23,42,0.95);
+  border: 1px solid rgba(96,165,250,0.35);
+  box-shadow: 0 18px 80px rgba(0,0,0,0.45);
+  text-align: center;
+  color: #e2e8f0;
+  animation: presentCardIn 0.55s ease;
+}
+.present-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 18px;
+  font-size: 48px;
+  border-radius: 28px;
+  background: radial-gradient(circle at top left, rgba(96,165,250,0.25), transparent 55%), radial-gradient(circle at bottom right, rgba(59,130,246,0.18), transparent 45%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+.present-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(22px,4vw,32px);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+.present-text {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.present-button {
+  background: #2563eb;
+  border: none;
+  border-radius: 999px;
+  color: #e2e8f0;
+  padding: 12px 24px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+}
+.present-button:hover { transform: translateY(-1px); }
+@keyframes presentCardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.day-score-input {
+  width: 68px;
+  text-align: center;
+  padding: 6px 8px;
+  font-size: 13px;
+  background: rgba(15,23,42,0.78);
+  color: #e2e8f0;
+  border: 1px solid rgba(96,165,250,0.22);
+}
+
+/* ── FLASH ── */
+@keyframes flash {
+  0%   { filter: brightness(1); }
+  40%  { filter: brightness(1.5) saturate(1.5); }
+  100% { filter: brightness(1); }
+}
+.flash { animation: flash 0.6s ease; }
+
+/* ── HIST TABLE ── */
+.hist-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.hist-table th {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+  color: #e2e8f0; opacity: 0.75; padding: 6px 10px; text-align: center;
+  border-bottom: 1px solid rgba(96,165,250,0.18); white-space: nowrap; font-weight: 700;
+}
+.hist-table td { padding: 7px 10px; text-align: center; border-bottom: 1px solid rgba(148,163,184,0.14); color: #d1d5db; }
+.hist-table td:first-child { text-align: left; }
+.hist-table tr:last-child td { border-bottom: none; }
+
+/* ── DECORATIVE DOTS ── */
+.deco-dot {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(96,165,250,0.08);
+  pointer-events: none;
+  z-index: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Decorative circles -->
+<div class="deco-dot" style="width:400px;height:400px;top:-100px;left:-100px;"></div>
+<div class="deco-dot" style="width:300px;height:300px;bottom:-80px;right:-80px;"></div>
+<div class="deco-dot" style="width:200px;height:200px;top:40%;left:60%;"></div>
+
+  <!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div id="login-box">
+    <div style="font-size:48px;margin-bottom:14px;">🎩</div>
+    <div class="font-cinzel" style="font-size:24px;font-weight:700;color:#e2e8f0;margin-bottom:6px;letter-spacing:1px;">Campo Estivo</div>
+    <div class="font-cinzel" style="font-size:11px;color:#cbd5e1;letter-spacing:4px;text-transform:uppercase;margin-bottom:30px;opacity:0.7;">Alice nel Paese delle Meraviglie</div>
+    <div style="font-size:12px;color:#cbd5e1;opacity:0.6;margin-bottom:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">Inserisci la password</div>
+    <input id="login-input" type="password" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button id="login-btn" onclick="doLogin()">✨ Entra nel Paese delle Meraviglie</button>
+    <div id="login-error">Password errata. Riprova! 🐱</div>
+</div>
+  <div style="margin-top:24px;font-size:11px;color:rgba(148,163,184,0.35);letter-spacing:3px;text-transform:uppercase;font-weight:600;">Campo Estivo 2026</div>
+</div>
+
+<div class="page-bg" style="position:relative;z-index:1;max-width:1100px;margin:0 auto;">
+
+  <!-- HEADER -->
+<header style="text-align:center;margin-bottom:44px;padding-top:8px;">
+    <div style="font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#cbd5e1;margin-bottom:10px;font-weight:700;opacity:0.6;">Campo Estivo 2026</div>
+    <h1 class="font-cinzel" style="font-size:clamp(28px,6vw,52px);font-weight:700;color:#e2e8f0;letter-spacing:1px;line-height:1.15;margin-bottom:8px;text-shadow:3px 3px 0 rgba(96,165,250,0.15);">
+      Alice nel Paese<br>delle Meraviglie
+    </h1>
+    <div style="width:72px;height:3px;background:#2563eb;margin:16px auto;border-radius:2px;opacity:0.4;"></div>
+    <p style="color:#cbd5e1;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:700;opacity:0.5;">Classifica Intelligente</p>
+  </header>
+
+  <div class="page-tabs">
+    <button class="page-tab-btn active" id="page-btn-macro" onclick="switchPage('macro')">⚜️ Macro Gruppi</button>
+    <button class="page-tab-btn" id="page-btn-squadre" onclick="switchPage('squadre')">👥 Squadre singole</button>
+    <button class="page-tab-btn" id="page-btn-upload" onclick="switchPage('upload')">📤 Upload Media</button>
+    <button class="page-tab-btn" onclick="window.location.href='genitori.html'" style="background:rgba(37,99,235,0.18);border-color:rgba(37,99,235,0.4);">👨‍👩‍👧‍👦 Sito Genitori</button>
+    <button class="page-tab-btn" style="background:rgba(37,99,235,0.18);border-color:rgba(37,99,235,0.4);" onclick="presentClassification()">🎩 Presenta classifiche</button>
+  </div>
+
+  <div id="present-overlay" class="present-overlay">
+    <div class="present-card">
+      <div class="present-emoji">👧✨</div>
+      <div class="present-title">Alice sta per mostrare le classifiche…</div>
+      <div class="present-text">Un attimo e vedrai i risultati aggiornati delle squadre e dei macro-gruppi, con la magia del Paese delle Meraviglie.</div>
+      <button class="present-button" onclick="hidePresentation()">Salta l'animazione</button>
+    </div>
+  </div>
+
+  <div id="page-macro" class="page-section active">
+    <!-- MACRO GROUPS -->
+    <section style="margin-bottom:44px;">
+      <div class="sec-title">⚜️ Macro-Gruppi</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;" id="macro-cards"></div>
+    </section>
+  </div>
+
+  <div id="page-upload" class="page-section">
+    <section style="margin-bottom:44px;">
+      <div class="sec-title">📤 Carica Foto / Video per Genitori</div>
+      <div class="glass" style="padding:20px;max-width:760px;margin:0 auto;">
+        <p style="color:#cbd5e1;margin-bottom:12px;">Usa questo pannello per caricare rapidamente foto o brevi video che saranno visibili nel sito genitori.</p>
+        <div style="display:grid;gap:10px;">
+          <input type="file" id="quick-parent-file" accept="image/*,video/*" style="padding:10px;border-radius:12px;border:1.5px solid rgba(96,165,250,0.22);background:rgba(15,23,42,0.7);color:#e2e8f0;" />
+          <input type="text" id="quick-parent-caption" placeholder="Descrizione (opzionale)" style="padding:12px;border-radius:12px;border:1.5px solid rgba(96,165,250,0.22);background:rgba(15,23,42,0.7);color:#e2e8f0;" />
+          <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
+            <button class="btn-ghost" onclick="document.getElementById('quick-parent-file').value=''">Annulla</button>
+            <button class="btn-primary" onclick="uploadParentPhoto()">📸/🎥 Carica e sincronizza</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="page-squadre" class="page-section">
+    <!-- VERTICAL BAR CHART -->
+    <section style="margin-bottom:44px;">
+      <div class="sec-title">🏆 Classifica — Barre Verticali</div>
+      <div class="glass" style="padding:24px 20px 20px;">
+        <div class="bar-chart-wrap">
+          <div class="bar-chart" id="bar-chart"></div>
+        </div>
+        <div style="height:2px;background:rgba(96,165,250,0.18);margin:0 4px;border-radius:2px;"></div>
+      </div>
+    </section>
+
+    <!-- DAILY SCORES -->
+  <section style="margin-bottom:44px;">
+    <div class="sec-title">📅 Punteggi Giornalieri</div>
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+      <button class="tab-btn active" id="tab-add" onclick="switchTab('add')">➕ Aggiungi Giornata</button>
+      <button class="tab-btn" id="tab-hist" onclick="switchTab('hist')">📋 Storico Giornate</button>
+    </div>
+
+    <div id="panel-add" class="glass" style="padding:22px;">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap;">
+        <div>
+          <label style="font-size:11px;color:#cbd5e1;opacity:0.7;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Data giornata</label>
+          <input type="date" id="day-date" style="width:160px;" />
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <label style="font-size:11px;color:#cbd5e1;opacity:0.7;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Attività / Evento</label>
+          <input type="text" id="day-activity" placeholder="es. Corsa del riccio, Croquet, Gara di indovinelli…" style="width:100%;" />
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="day-table" id="day-input-table">
+          <thead>
+            <tr>
+              <th>Squadra</th>
+              <th style="text-align:center;">Punti giornata</th>
+              <th style="text-align:center;">Totale attuale</th>
+            </tr>
+          </thead>
+          <tbody id="day-input-body"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+        <button class="btn-save-day" onclick="saveDay()">💾 Salva Giornata</button>
+      </div>
+    </div>
+
+    <div id="panel-hist" style="display:none;">
+      <div class="glass" style="padding:20px;max-height:420px;overflow-y:auto;">
+        <div id="hist-content"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <section style="margin-bottom:44px;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <button class="toggle-btn" onclick="toggleAdmin()">⚙️ Gestisci Punti Rapidi</button>
+    </div>
+    <div id="admin-panel" style="display:none;" class="glass">
+      <div style="padding:24px;">
+        <div class="font-cinzel" style="font-size:15px;font-weight:700;color:#e2e8f0;margin-bottom:20px;letter-spacing:1px;">🎭 Pannello Animatori</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div>
+            <label style="font-size:11px;color:#cbd5e1;opacity:0.75;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Squadra</label>
+            <select id="admin-squad" style="width:100%;"></select>
+          </div>
+          <div>
+            <label style="font-size:11px;color:#cbd5e1;opacity:0.75;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Punti manuali</label>
+            <input type="number" id="admin-points" placeholder="es. 75 oppure -30" style="width:100%;" />
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:11px;color:#cbd5e1;opacity:0.75;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Motivazione (facoltativa)</label>
+          <input type="text" id="admin-reason" placeholder="es. Vittoria al gioco del croquet 🐦" style="width:100%;" />
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <span style="font-size:11px;color:#cbd5e1;opacity:0.65;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Rapido:</span>
+          <button class="btn-plus" onclick="quickPts(10)">+10</button>
+          <button class="btn-plus" onclick="quickPts(50)">+50</button>
+          <button class="btn-plus" onclick="quickPts(100)">+100</button>
+          <button class="btn-minus" onclick="quickPts(-50)">−50</button>
+          <button class="btn-primary" onclick="applyPoints()" style="margin-left:auto;">✨ Applica</button>
+        </div>
+        <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(148,163,184,0.12);">
+          <div style="font-size:13px;color:#cbd5e1;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Carica foto per il sito genitori</div>
+          <div style="display:grid;gap:12px;">
+            <input type="file" id="parent-photo-file" accept="image/*,video/*" style="padding:10px;border-radius:14px;border:1.5px solid rgba(96,165,250,0.32);background:rgba(15,23,42,0.78);color:#e2e8f0;" />
+            <input type="text" id="parent-photo-caption" placeholder="Descrizione (opzionale)" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid rgba(96,165,250,0.32);background:rgba(15,23,42,0.78);color:#e2e8f0;" />
+            <button class="btn-primary" onclick="uploadParentPhoto()">📸/🎥 Carica media genitori</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOG -->
+  <section style="margin-bottom:48px;">
+    <div class="sec-title">📜 Cronologia Azioni</div>
+    <div class="glass" style="padding:16px;max-height:280px;overflow-y:auto;">
+      <div id="log-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </section>
+
+  <!-- RESET -->
+  <div style="text-align:center;padding-bottom:8px;">
+    <button class="btn-danger" onclick="resetAll()">🗑️ Reset Campionato</button>
+  </div>
+
+</div>
+
+<script>
+const SQUADS = [
+  // 🔴 MACRO ROSSO
+  { id:'bruca',     name:'I Brucaliffi',            macro:'rossi', color:'#a855f7', border:'rgba(168,85,247,0.6)' },
+  { id:'fanti',     name:'I Fanti della Regina', macro:'rossi', color:'#6b7280', border:'rgba(107,114,128,0.6)' },
+  { id:'ostriche',  name:'Le Ostrichette',         macro:'rossi', color:'#ec4899', border:'rgba(236,72,153,0.6)' },
+
+  // 🟢 MACRO VERDE
+  { id:'gemelli',   name:'I Gemelli Pinco',         macro:'verdi', color:'#0ea5e9', border:'rgba(14,165,233,0.6)' },
+  { id:'fiori',     name:'I Fiori Parlanti',      macro:'verdi', color:'#f97316', border:'rgba(249,115,22,0.6)' },
+  { id:'stregatti', name:'Gli Stregatti',           macro:'verdi', color:'#d946ef', border:'rgba(217,70,239,0.6)' },
+
+  // 🔵 MACRO BLU
+  { id:'bianconig', name:'I Bianconigli',           macro:'blu',   color:'#94a3b8', border:'rgba(148,163,184,0.6)' },
+  { id:'cappellai', name:'I Cappellai Matti',      macro:'blu',   color:'#059669', border:'rgba(5,150,105,0.6)' },
+  { id:'noncompl',  name:'I Non-Compleanni',        macro:'blu',   color:'#ca8a04', border:'rgba(202,138,4,0.6)' },
+];
+
+const MACROS = {
+  rossi: { label:'Macro Rossi', emoji:'🔴', cls:'macro-rossi', accent:'#dc2626' },
+  verdi: { label:'Macro Verdi', emoji:'🟢', cls:'macro-verdi', accent:'#059669' },
+  blu:   { label:'Macro Blu',   emoji:'🔵', cls:'macro-blu-group', accent:'#60a5fa' },
+};
+
+const KEY = 'alice2025v3';
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(KEY);
+    if (s) {
+      const parsed = JSON.parse(s);
+      if (parsed && typeof parsed === 'object') {
+        parsed.photos = Array.isArray(parsed.photos) ? parsed.photos : [];
+        return parsed;
+      }
+    }
+  } catch(e) {}
+  const scores = {}; SQUADS.forEach(sq => scores[sq.id] = 0);
+  return { scores, log: [], days: [], photos: [] };
+}
+let state = loadState();
+let currentPage = 'macro';
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+function uploadParentPhoto() {
+  // support file from admin panel or quick upload panel
+  const input = document.getElementById('parent-photo-file') || document.getElementById('quick-parent-file');
+  const captionEl = document.getElementById('parent-photo-caption') || document.getElementById('quick-parent-caption');
+  const caption = (captionEl && captionEl.value) ? captionEl.value.trim() : '';
+  if (!input) {
+    alert('Impossibile trovare il campo file. Ricarica la pagina e riprova.');
+    return;
+  }
+  const file = input.files && input.files.length ? input.files[0] : null;
+  if (!file) {
+    alert('Seleziona un file immagine o video prima di premere Carica.');
+    return;
+  }
+  // warn on large files (localStorage is limited)
+  const MAX_BYTES = 2 * 1024 * 1024; // 2MB
+  if (file.size > MAX_BYTES) {
+    if (!confirm('Il file selezionato è grande (' + Math.round(file.size/1024) + 'KB). Potrebbe non essere salvabile in localStorage. Continuare?')) {
+      return;
+    }
+  }
+  const reader = new FileReader();
+  reader.onerror = (e) => { console.error('FileReader error', e); alert('Errore nel leggere il file. Controlla il formato e riprova.'); };
+  reader.onload = () => {
+    state.photos = Array.isArray(state.photos) ? state.photos : [];
+    const isVideo = file.type && file.type.startsWith('video');
+    state.photos.unshift({ caption, src: reader.result, type: isVideo ? 'video' : 'image' });
+    if (state.photos.length > 12) state.photos.pop();
+    save();
+    if (input) input.value = '';
+    if (captionEl) captionEl.value = '';
+    alert('Media caricato e sincronizzato con il sito genitori.');
+  };
+  reader.readAsDataURL(file);
+}
+function macroTotal(m) { return SQUADS.filter(s => s.macro === m).reduce((a,s) => a+(state.scores[s.id]||0), 0); }
+function maxScore() { return Math.max(1, ...SQUADS.map(s => state.scores[s.id]||0)); }
+function squad(id) { return SQUADS.find(s => s.id === id); }
+function fmt(n) { return (n||0).toLocaleString('it-IT'); }
+function nowStr() { return new Date().toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+
+/* MACRO CARDS */
+function renderMacros() {
+  const c = document.getElementById('macro-cards');
+  c.innerHTML = '';
+  ['rossi','verdi','blu'].forEach(m => {
+    const info = MACROS[m];
+    const squads = SQUADS.filter(s => s.macro === m).sort((a,b) => (state.scores[b.id]||0) - (state.scores[a.id]||0));
+    const total = macroTotal(m);
+    const groupMax = Math.max(1, ...squads.map(s => state.scores[s.id] || 0));
+    c.innerHTML += `
+    <div class="macro-card ${info.cls}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:20px;">${info.emoji}</span>
+        <div>
+          <div class="font-cinzel" style="font-size:13px;font-weight:700;color:${info.accent};letter-spacing:1px;">${info.label.toUpperCase()}</div>
+          <div style="font-size:10px;color:#cbd5e1;opacity:0.55;margin-top:1px;font-weight:600;">Classifica interna</div>
+        </div>
+      </div>
+      <div class="macro-num" style="color:${info.accent};">${fmt(total)}</div>
+      <div style="font-size:11px;color:#cbd5e8;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">punti totali</div>
+      <div class="macro-bar-chart">
+        ${squads.map((s, idx) => {
+          const pts = state.scores[s.id] || 0;
+          const height = Math.max(10, Math.round((pts / groupMax) * 80));
+          const rank = idx===0 ? '🥇' : idx===1 ? '🥈' : idx===2 ? '🥉' : `#${idx+1}`;
+          return `
+          <div class="macro-bar-col">
+            <div class="macro-bar-rect-wrap">
+              <div class="macro-bar-rect" style="height:${height}px;background:${s.color};" title="${s.name}: ${fmt(pts)} punti"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:60px;">
+              <div class="macro-bar-rank">${rank}</div>
+              <div class="macro-bar-name">${s.name}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+}
+
+/* BAR CHART */
+function renderBars() {
+  const chart = document.getElementById('bar-chart');
+  const sorted = [...SQUADS].sort((a,b) => (state.scores[b.id]||0)-(state.scores[a.id]||0));
+  const max = maxScore();
+  const MAX_H = 280;
+  chart.innerHTML = '';
+  sorted.forEach((sq, i) => {
+    const pts = state.scores[sq.id] || 0;
+    const h = max > 0 ? Math.max(4, Math.round((pts/max)*MAX_H)) : 4;
+    const rankLabel = i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+    const rankCls = i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'rank-other';
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    col.id = `bar-${sq.id}`;
+    col.innerHTML = `
+      <div class="bar-score">${fmt(pts)}</div>
+      <div class="bar-rect-wrap">
+        <div class="bar-rect" id="rect-${sq.id}"
+          style="height:${h}px;background:${sq.color};box-shadow:3px 3px 0 rgba(0,0,0,0.15);"
+          title="${sq.name}: ${fmt(pts)} punti">
+        </div>
+      </div>
+      <div class="bar-name">${sq.name.replace(/^(I |Le |Gli |I\u00a0)/,'')}</div>
+      <div class="bar-rank ${rankCls}">${rankLabel}</div>
+    `;
+    chart.appendChild(col);
+  });
+}
+
+/* DAY INPUT TABLE */
+function renderDayInputTable() {
+  const tbody = document.getElementById('day-input-body');
+  tbody.innerHTML = '';
+  const today = new Date().toISOString().split('T')[0];
+  if (!document.getElementById('day-date').value) document.getElementById('day-date').value = today;
+  SQUADS.forEach(sq => {
+    tbody.innerHTML += `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${sq.color};border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;"></span>
+            <span style="font-size:13px;font-weight:600;color:#e2e8f0;">${sq.name}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+            <button class="btn-minus" onclick="stepDay('${sq.id}',-10)" style="padding:3px 9px;font-size:12px;">−</button>
+            <input type="number" class="day-score-input" id="day-${sq.id}" value="0" />
+            <button class="btn-plus" onclick="stepDay('${sq.id}',10)" style="padding:3px 9px;font-size:12px;">+</button>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="font-cinzel" style="font-size:14px;font-weight:700;color:${sq.color};" id="cur-${sq.id}">${fmt(state.scores[sq.id])}</span>
+        </td>
+      </tr>`;
+  });
+}
+
+function stepDay(id, delta) {
+  const inp = document.getElementById(`day-${id}`);
+  inp.value = parseInt(inp.value||0) + delta;
+}
+
+/* SAVE DAY */
+function saveDay() {
+  const date = document.getElementById('day-date').value;
+  const activity = document.getElementById('day-activity').value.trim();
+  if (!date) { alert('Seleziona una data.'); return; }
+  const scores = {};
+  let anyNonZero = false;
+  SQUADS.forEach(sq => {
+    const v = parseInt(document.getElementById(`day-${sq.id}`).value) || 0;
+    scores[sq.id] = v;
+    if (v !== 0) anyNonZero = true;
+  });
+  if (!anyNonZero) { alert('Inserisci almeno un punteggio diverso da 0.'); return; }
+  if (!state.days) state.days = [];
+  state.days.push({ date, activity, scores });
+  SQUADS.forEach(sq => {
+    const v = scores[sq.id] || 0;
+    if (v !== 0) {
+      state.scores[sq.id] = (state.scores[sq.id]||0) + v;
+      state.log.push({ squad:sq.id, pts:v, reason:activity?`[${date}] ${activity}`:`[${date}]`, time:nowStr() });
+    }
+  });
+  save(); renderAll(); renderDayInputTable();
+  document.getElementById('day-activity').value = '';
+  SQUADS.forEach(sq => { document.getElementById(`day-${sq.id}`).value = 0; });
+  switchTab('hist');
+}
+
+/* HISTORY */
+function renderHistory() {
+  const c = document.getElementById('hist-content');
+  const days = (state.days||[]).slice().reverse();
+  if (!days.length) {
+    c.innerHTML = '<div style="color:#cbd5e1;opacity:0.55;text-align:center;padding:24px;font-size:14px;font-weight:600;">Nessuna giornata registrata ancora.</div>';
+    return;
+  }
+  let html = '';
+  days.forEach(d => {
+    html += `
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div class="font-cinzel" style="font-size:14px;font-weight:700;color:#e2e8f0;">${d.date}</div>
+        ${d.activity?`<div style="font-size:12px;color:#cbd5e1;background:rgba(96,165,250,0.12);border-radius:8px;padding:3px 10px;font-weight:600;border:1px solid rgba(96,165,250,0.2);">${d.activity}</div>`:''}
+      </div>
+      <table class="hist-table">
+        <thead><tr>
+          <th style="text-align:left;">Squadra</th>
+          ${SQUADS.map(s=>`<th><span style="color:${s.color};font-size:9px;font-weight:700;">${s.name.split(' ').slice(-1)[0]}</span></th>`).join('')}
+        </tr></thead>
+        <tbody><tr>
+          <td style="color:#cbd5e1;opacity:0.65;font-size:12px;font-weight:600;">Punti</td>
+          ${SQUADS.map(s=>{const v=d.scores[s.id]||0;return`<td style="font-weight:700;color:${v>0?'#4ade80':v<0?'#f87171':'#cbd5e1'};">${v>0?'+':''}${v}</td>`;}).join('')}
+        </tr></tbody>
+      </table>
+    </div>`;
+  });
+  c.innerHTML = html;
+}
+
+/* LOG */
+function renderLog() {
+  const list = document.getElementById('log-list');
+  const entries = [...(state.log||[])].reverse().slice(0,30);
+  if (!entries.length) {
+    list.innerHTML = '<div style="color:#cbd5e1;opacity:0.55;font-size:13px;text-align:center;padding:20px;font-weight:600;">Nessuna azione registrata.</div>';
+    return;
+  }
+  list.innerHTML = entries.map(e => {
+    const sq = squad(e.squad);
+    const sign = e.pts >= 0 ? '+' : '';
+    return `<div class="log-entry" style="border-left-color:${sq?.color||'#60a5fa'};">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+        <div>
+          <span style="font-weight:700;color:${sq?.color||'#cbd5e1'};">${sq?.name||e.squad}</span>
+          ${e.reason?`<span style="color:#cbd5e1;opacity:0.65;font-size:12px;"> — ${e.reason}</span>`:''}
+        </div>
+        <span style="font-weight:700;color:${e.pts>=0?'#4ade80':'#fca5a5'};white-space:nowrap;">${sign}${e.pts}</span>
+      </div>
+      <div style="font-size:11px;color:#cbd5e1;opacity:0.55;margin-top:3px;font-weight:600;">${e.time}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ADMIN */
+function renderAdminSelect() {
+  document.getElementById('admin-squad').innerHTML = SQUADS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+}
+function toggleAdmin() {
+  const p = document.getElementById('admin-panel');
+  p.style.display = p.style.display==='none' ? 'block' : 'none';
+}
+function switchPage(page) {
+  currentPage = page;
+  document.getElementById('page-macro').classList.toggle('active', page === 'macro');
+  document.getElementById('page-squadre').classList.toggle('active', page === 'squadre');
+  document.getElementById('page-upload').classList.toggle('active', page === 'upload');
+  document.getElementById('page-btn-macro').classList.toggle('active', page === 'macro');
+  document.getElementById('page-btn-squadre').classList.toggle('active', page === 'squadre');
+  document.getElementById('page-btn-upload').classList.toggle('active', page === 'upload');
+  if (page === 'squadre') renderBars();
+  if (page === 'macro') renderMacros();
+}
+function presentClassification() {
+  const overlay = document.getElementById('present-overlay');
+  overlay.classList.add('active');
+  renderAll();
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    switchPage(currentPage);
+  }, 1800);
+}
+function hidePresentation() {
+  document.getElementById('present-overlay').classList.remove('active');
+  switchPage(currentPage);
+}
+function addPoints(id, pts, reason) {
+  state.scores[id] = (state.scores[id]||0) + pts;
+  state.log.push({ squad:id, pts, reason:reason||'', time:nowStr() });
+  save(); renderAll();
+  const rect = document.getElementById(`rect-${id}`);
+  if (rect) { rect.classList.remove('flash'); void rect.offsetWidth; rect.classList.add('flash'); }
+}
+function quickPts(pts) {
+  const id = document.getElementById('admin-squad').value;
+  const reason = document.getElementById('admin-reason').value.trim();
+  addPoints(id, pts, reason||null);
+}
+function applyPoints() {
+  const id = document.getElementById('admin-squad').value;
+  const pts = parseInt(document.getElementById('admin-points').value)||0;
+  if (pts===0) { alert('Inserisci un valore diverso da 0'); return; }
+  const reason = document.getElementById('admin-reason').value.trim();
+  addPoints(id, pts, reason||null);
+  document.getElementById('admin-points').value = '';
+  document.getElementById('admin-reason').value = '';
+}
+
+/* TABS */
+function switchTab(tab) {
+  document.getElementById('tab-add').classList.toggle('active', tab==='add');
+  document.getElementById('tab-hist').classList.toggle('active', tab==='hist');
+  document.getElementById('panel-add').style.display = tab==='add' ? 'block' : 'none';
+  document.getElementById('panel-hist').style.display = tab==='hist' ? 'block' : 'none';
+  if (tab==='hist') renderHistory();
+}
+
+/* RESET */
+function resetAll() {
+  if (confirm('🗑️ Azzerare TUTTI i punti, le giornate e la cronologia? Azione irreversibile.')) {
+    const scores = {}; SQUADS.forEach(sq => scores[sq.id]=0);
+    state = { scores, log:[], days:[] };
+    save(); renderAll(); renderDayInputTable(); switchTab('add');
+  }
+}
+
+/* RENDER ALL */
+function renderAll() {
+  renderMacros(); renderBars(); renderLog();
+  SQUADS.forEach(sq => {
+    const el = document.getElementById(`cur-${sq.id}`);
+    if (el) el.textContent = fmt(state.scores[sq.id]);
+  });
+}
+
+/* PASSWORD */
+const PASSWORD = "Vegeta&Borrino";
+const SESSION_KEY = "alice_auth";
+
+function doLogin() {
+  const val = document.getElementById("login-input").value;
+  const err = document.getElementById("login-error");
+  if (val === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, "1");
+    const screen = document.getElementById("login-screen");
+    screen.style.transition = "opacity 0.5s ease";
+    screen.style.opacity = "0";
+    setTimeout(() => screen.style.display = "none", 550);
+    err.style.display = "none";
+  } else {
+    err.style.display = "block";
+    const inp = document.getElementById("login-input");
+    inp.style.borderColor = "rgba(220,38,38,0.8)";
+    inp.value = "";
+    setTimeout(() => { inp.style.borderColor = ""; }, 1200);
+  }
+}
+
+function checkAuth() {
+  if (sessionStorage.getItem(SESSION_KEY) === "1") {
+    document.getElementById("login-screen").style.display = "none";
+  }
+}
+
+/* INIT */
+checkAuth();
+renderAdminSelect();
+renderDayInputTable();
+renderAll();
+</script>
+</body>
+</html>
